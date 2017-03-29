@@ -2,9 +2,14 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
+*.out
+
+# Lex files
+lex.yy.c
 
 # Distribution / packaging
 .Python
