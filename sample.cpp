@@ -28,9 +28,13 @@ A obj1;
 C obj2;
 cin>>a;
 cout<<"HIH";
-if(a==b)
+
+for(i=j;i<4;i=i+1)
 {
-	cout<<"HI"<<obj1.d<<obj2.q;
+	cout<<"HI";
 }
+
+x=3+8-90*obj1.d*x-4;
+
 return 1;
 }

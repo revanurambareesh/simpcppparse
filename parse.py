@@ -170,6 +170,7 @@ def parsefile(filename):
             print 'Successfully parsed. C++ program is according to syntax.'
             if error_line_nums!='':
                 print 'Note that panic mode recovery was applied'
+                return 'accept on recovery'
             return 'accept'
             break
 

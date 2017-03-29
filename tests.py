@@ -3,9 +3,21 @@ import parse
 
 class TestStringMethods(unittest.TestCase):
 
-    def test_upper(self):
-    	lex_outputfile='output.txt'
+    def test_if(self):
+    	lex_outputfile='tc/if.txt'
         self.assertEqual('accept', parse.parsefile(lex_outputfile))
+
+    def test_ifel(self):
+    	lex_outputfile='tc/ifel.txt'
+        self.assertEqual('accept', parse.parsefile(lex_outputfile))
+
+    def test_for(self):
+    	lex_outputfile='tc/for.txt'
+        self.assertEqual('accept', parse.parsefile(lex_outputfile))
+
+	def test_for(self):
+    	lex_outputfile='tc/expr.txt'
+        self.assertEqual('accept', parse.parsefile(lex_outputfile))    
 
     '''def test_isupper(self):
         self.assertTrue('FOO'.isupper())

@@ -7,16 +7,6 @@ Simple C++ Parser
 #include <stdio.h>
 #include <stdlib.h>
 int scope=0;
-/*
-struct symtab
-{
-	int scope;
-	char name[100];
-	char type[100];//data, literal
-	char comment[100];
-	int inherits[100];//record numbers
-}record[1000];*/
-
 int recordNum=0;
 int linenum=1;
 
@@ -82,7 +72,7 @@ int printSymTab()
 
 %}
 
-
+num [0-9]+
 validvar [a-zA-Z][0-9a-zA-Z]*
 validmem [a-zA-Z][\.0-9a-zA-Z]*
 arr \[[0-9]*\]
@@ -99,6 +89,7 @@ uop "++"|"--"
 {normal} {declareFound(yytext);} /*verify_if_the_variable_is_classMem_or_Duplicate*/
 "class "{validvar}(":"{validvar}(","{validvar})*)? {classFound(yytext);}
 "if" {fprintf(outfile, "%s", "f ");}
+"for" {fprintf(outfile, "%s", "for ");}
 {op} {fprintf(outfile, "%s", "op ");}
 "(" {fprintf(outfile, "%s", "( ");}
 ")" {fprintf(outfile, "%s", ") ");}
@@ -113,8 +104,9 @@ uop "++"|"--"
 "else" {fprintf(outfile, "%s", "el ");}
 (" ")+|[\t]+ ;
 [";"] fprintf(outfile, "%s", "; ");
-[\n] {linenum++;fprintf(outfile, "");}
+[\n] {linenum++;fprintf(outfile, "%d ", linenum);}
 {validmem} {printf("\n%s\n", yytext);verifyID(yytext);}
+{num} {printf("\n%s\n", yytext);verifyID(yytext);}
 {validvar} {verifyID(yytext);}
 . {printf("\nfailed: %s\n", yytext);}
 %%
@@ -126,7 +118,7 @@ int main()
 {
 yyin=fopen("sample.cpp", "r");
 outfile=fopen("output.txt", "w+");
-//fprintf(outfile, "%s", "# ");
+fprintf(outfile, "%s", "1 ");
 yylex();
 return 1;
 }
