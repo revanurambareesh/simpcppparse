@@ -1,5 +1,5 @@
 import unittest
-from . import parse
+import parse
 
 class TestStringMethods(unittest.TestCase):
 
