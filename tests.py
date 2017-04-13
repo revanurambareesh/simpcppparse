@@ -3,7 +3,7 @@ import parse
 
 __author__ = 'Ambareesh Revanur'
 
-class TestStringMethods(unittest.TestCase):
+class TestParser(unittest.TestCase):
 
     def test_if(self):
         lex_outputfile='tc/if.txt'
@@ -17,11 +17,16 @@ class TestStringMethods(unittest.TestCase):
         lex_outputfile='tc/for.txt'
         self.assertEqual('accept', parse.parsefile(lex_outputfile))
 
-    def test_for(self):
+    def test_expr(self):
         lex_outputfile='tc/expr.txt'
-        self.assertEqual('accept', parse.parsefile(lex_outputfile))    
+        self.assertEqual('accept', parse.parsefile(lex_outputfile))
+
+    def test_panic(self):
+        lex_outputfile='tc/panic1.txt'
+        self.assertEqual('panic', parse.parsefile(lex_outputfile)) 
 
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestParser)
+    unittest.TextTestRunner(verbosity=2).run(suite)
