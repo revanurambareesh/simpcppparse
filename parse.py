@@ -87,6 +87,12 @@ def get_reduce(number):
 
 
 
+def get_eval(estr):
+	if estr == 'e1':
+		return e1.e1
+
+
+
 def shift(stack, state, terminal):
     stack += ' ' + terminal + ' ' + M(state, terminal)[1:]  # push
     print 'state', state, 'terminal', terminal, 'action', M(state, terminal)
@@ -156,21 +162,19 @@ def parsefile(filename):
             index += 1
             continue
 
+        state = stack.split(' ')[len(stack.split(' ')) - 1]
+        terminal = input_array[index]
+
         print '====Log===='
         print 'Line number:', line_num
         print 'stack: ', stack
         print 'current input symbol: ', terminal
 
-        state = stack.split(' ')[len(stack.split(' ')) - 1]
-        terminal = input_array[index]
-
         if M(state, terminal) == '':
             print 'Error in line number: ', line_num
             print 'Panic mode recovery initiated'
+            print 'Debug info: ..[terminal-> \"', terminal, '\"]..[state ->', state, ']'
             error_line_nums += (str(line_num) + ' ')
-            #time.sleep(3)	#for remote debugging :p TODO
-
-            #while M(state, terminal) is '':
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
             stack = stack[:-length_to_subtract]
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
@@ -182,9 +186,18 @@ def parsefile(filename):
 
         elif M(state, terminal)[0] == 'e':
         	print 'Error in line number: ', line_num
-        	print 'Phrase level recovery initiated'
+        	print 'Phrase level recovery initiated', M(state, terminal)
+
         	error_line_nums += (str(line_num) + ' ')
-        	stack, terminal, index = pl_recovery.M(state, terminal)(stack, terminal, index)
+        	#print stack
+        	#print input_array
+        	#print index
+        	stack, input_array, index = get_eval(M(state, terminal))(stack, input_array, index)
+        	#print stack
+        	#print input_array
+        	#print index
+        	#time.sleep(3)
+        	continue
         	pass
 
         elif M(state, terminal)[0] == 'a':

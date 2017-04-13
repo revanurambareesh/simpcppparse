@@ -7,11 +7,11 @@ int a, b, c;
 class A
 {
 	int d, e, f;
-	int function1()
+	int function1(()
 	{
 		int a, b, c;
 		return 1;
-	}}
+	}
 };
 
 int fun()
@@ -34,7 +34,7 @@ for(i=j;i<4;i=i+1)
 	cout<<"HI";
 }
 
-x===3+8-90*obj1.d*x-4;
+x=3+8-90*obj1.d*x-4;
 x==3;//valid
 return 1;
 }
