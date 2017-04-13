@@ -132,7 +132,7 @@ def reduce(stack, state, terminal):
 def parsefile(filename):
     stack = '$ 0'
     error_line_nums = ''
-    input_string = ''  # contains the line numbers TODO
+    input_string = ''
     with open(filename, 'r') as f:
         input_string = f.read()
 
@@ -142,7 +142,7 @@ def parsefile(filename):
     index = 1
     terminal = input_array[index]
 
-    while M(state, terminal) != 'a' and stack.strip() != '':  # TODO
+    while M(state, terminal) != 'a' and stack.strip() != '':
         if input_array[index].isdigit():
             line_num = int(input_array[index])
             index += 1
@@ -159,38 +159,27 @@ def parsefile(filename):
         if M(state, terminal) == '':
             print 'Error in line number: ', line_num
             error_line_nums += (str(line_num) + ' ')
-            print 'Panic mode recovery made.. Skipped the terminal ', terminal
-            index+=1
-            #print 'Stopped..'
-            #while True:
-            #    pass
-            continue
+            return 'not accepted'
 
         elif M(state, terminal)[0] == 'a':
             print 'Successfully parsed. C++ program is according to syntax.'
             if error_line_nums!='':
-                print 'Note that panic mode recovery was applied'
-                return 'accept on recovery'
-            return 'accept'
-            break
+                break
+            else:
+            	return 'accept'
 
-        else:
-            if M(state, terminal)[0] == 's':
-                stack = shift(stack, state, terminal)
-                index += 1
+        elif M(state, terminal)[0] == 's':
+            stack = shift(stack, state, terminal)
+            index += 1
 
-            if M(state, terminal)[0] == 'r':
-                temp_stack = stack
-                stack = reduce(stack, state, terminal)
-                if stack == '':
-                    print 'reduce failed'
-                    return '-1'
+        elif M(state, terminal)[0] == 'r':
+            temp_stack = stack
+            stack = reduce(stack, state, terminal)
+            if stack == '':
+                print 'reduce failed'
+                return '-1'
 
-    if stack.strip() == '$':  # TODO
-        print 'Did not recover from error'
-        return 'failed recovery'
-
-    elif error_line_nums != '':
+    if error_line_nums != '':
         print 'Error in folowing lines: ', ''.join(list(set(error_line_nums.split(' '))))
         return 'error'
 
