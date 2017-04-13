@@ -1,8 +1,6 @@
 %{
 
-/*
-Simple C++ Parser
-*/
+/*Simple C++ Parser*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,62 +10,36 @@ int linenum=1;
 
 FILE *outfile;
 
-void debugSymTab()
+void debugInfo()
 {
 	printf("\n\n====Line num: %d=====\n", linenum);
 }
 
-
 void declareFound(char* yytext)
 {
-/*
-Write into the symbol table all the variables.
-Remember to see if the variables duplicated in the same scope
-*/
-
-printf("Declaration statement found: %s\n", yytext);
-fprintf(outfile, "%s", "dec ");
-debugSymTab();
+	printf("Declaration statement found: %s\n", yytext);
+	fprintf(outfile, "%s", "dec ");
+	debugInfo();
 }
 
 void classFound(char* yytext)
 {
-/*
-class found: note that yytext may possibly contain even the inherited class
-*/
-printf("Class found: %s\n", yytext);
-fprintf(outfile, "%s", "cla ");
-
-debugSymTab();
+	printf("Class found: %s\n", yytext);
+	fprintf(outfile, "%s", "cla ");
+	debugInfo();
 }
 
 void functionDecFound(char* yytext)
 {
-/*Refer to the comments in the above classes*/
-printf("Function statement found: %s\n", yytext);
-fprintf(outfile, "%s", "fid ");
-debugSymTab();
-}
-
-int saveSymTab()
-{
-/*
-this procedure is used to finally save symbol table
-*/
+	printf("Function statement found: %s\n", yytext);
+	fprintf(outfile, "%s", "fid ");
+	debugInfo();
 }
 
 void verifyID(char* yytext)
 {
-	/*
-	Here the ID received is checked for presence in Symtab
-	*/
 	fprintf(outfile, "%s", "id ");
-	debugSymTab();
-}
-
-int printSymTab()
-{
-
+	debugInfo();
 }
 
 %}
@@ -116,9 +88,9 @@ int yywrap()
 
 int main()
 {
-yyin=fopen("sample.cpp", "r");
-outfile=fopen("output.txt", "w+");
-fprintf(outfile, "%s", "1 ");
-yylex();
-return 1;
+	yyin=fopen("sample.cpp", "r");
+	outfile=fopen("output.txt", "w+");
+	fprintf(outfile, "%s", "1 ");
+	yylex();
+	return 1;
 }

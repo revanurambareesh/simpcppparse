@@ -1,6 +1,7 @@
 parsetable = 'SSCD Parse table.csv'
 lex_outputfile = 'output.txt'
 
+__author__ = 'Ambareesh Revanur'
 
 def M(state, terminal):
     # state is an ascii string
