@@ -1,3 +1,6 @@
+from pl_recovery import e1
+import time
+
 parsetable = 'SSCD Parse table.csv'
 lex_outputfile = 'output.txt'
 
@@ -11,6 +14,7 @@ def M(state, terminal):
 
     return content[int(state) + 1].strip().split(',')[content[0].strip().split(',').index(terminal)]
     pass
+
 
 
 def get_reduce(number):
@@ -82,10 +86,12 @@ def get_reduce(number):
     pass
 
 
+
 def shift(stack, state, terminal):
     stack += ' ' + terminal + ' ' + M(state, terminal)[1:]  # push
     print 'state', state, 'terminal', terminal, 'action', M(state, terminal)
     return stack
+
 
 
 def reduce(stack, state, terminal):
@@ -130,6 +136,7 @@ def reduce(stack, state, terminal):
     return stack
 
 
+
 def parsefile(filename):
     stack = '$ 0'
     error_line_nums = ''
@@ -159,8 +166,26 @@ def parsefile(filename):
 
         if M(state, terminal) == '':
             print 'Error in line number: ', line_num
+            print 'Panic mode recovery initiated'
             error_line_nums += (str(line_num) + ' ')
-            return 'not accepted'
+            #time.sleep(3)	#for remote debugging :p TODO
+
+            #while M(state, terminal) is '':
+            length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
+            stack = stack[:-length_to_subtract]
+            length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
+            stack = stack[:-length_to_subtract]
+            continue
+
+
+            #return 'not accepted'
+
+        elif M(state, terminal)[0] == 'e':
+        	print 'Error in line number: ', line_num
+        	print 'Phrase level recovery initiated'
+        	error_line_nums += (str(line_num) + ' ')
+        	stack, terminal, index = pl_recovery.M(state, terminal)(stack, terminal, index)
+        	pass
 
         elif M(state, terminal)[0] == 'a':
             print 'Successfully parsed. C++ program is according to syntax.'
@@ -176,17 +201,18 @@ def parsefile(filename):
         elif M(state, terminal)[0] == 'r':
             temp_stack = stack
             stack = reduce(stack, state, terminal)
-            if stack == '':
+            if stack == '':	#TODO make a cleaner way to verify stack state at end of each iteration
                 print 'reduce failed'
                 return '-1'
 
     if error_line_nums != '':
-        print 'Error in folowing lines: ', ''.join(list(set(error_line_nums.split(' '))))
-        return 'error'
+        print 'Error in following lines:', ''.join(s + " " for s in list(set(error_line_nums.split(' '))))
+        return 'panic'
 
     else:
         print 'Program terminated'
 
 
+
 if __name__ == "__main__":
-    print parsefile(lex_outputfile)
+    print 'Parsing status: '+ parsefile(lex_outputfile)

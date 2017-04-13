@@ -1,6 +1,6 @@
 #include<iostream>
 #include<stdlib.h>
-#include <stdio.h> //note the comment and space between the include and stdio
+#include <stdio.h> //note this comment and space between the include and stdio
 
 int a, b, c;
 
@@ -11,7 +11,7 @@ class A
 	{
 		int a, b, c;
 		return 1;
-	}
+	}}
 };
 
 int fun()
@@ -34,7 +34,7 @@ for(i=j;i<4;i=i+1)
 	cout<<"HI";
 }
 
-x=3+8-90*obj1.d*x-4;
-
+x===3+8-90*obj1.d*x-4;
+x==3;//valid
 return 1;
 }
