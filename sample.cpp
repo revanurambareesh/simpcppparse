@@ -7,12 +7,12 @@ int a, b, c;
 class A
 {
 	int d, e, f;
-	int function1()
+	int function1(()
 	{
 		int a, b, c;
 		return 1;
 	}
-}};
+};
 
 int fun()
 {
@@ -29,9 +29,9 @@ C obj2;
 cin>>a;
 cout<<"HIH";
 
-if for(i=j;i<4;i=i+1)
+for(i=j;i<4;i=i+1)
 {
-	cout<<"HI";;
+	cout<<"HI";
 }
 
 x=3+8-90*obj1.d*x-4;

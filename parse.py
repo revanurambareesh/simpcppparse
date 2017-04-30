@@ -176,7 +176,7 @@ def parsefile(filename):
             print 'Error in line number: ', line_num
             print 'Panic mode recovery initiated'
             print 'Debug info: ..[terminal-> \"', terminal, '\"]..[state ->', state, ']'
-            error_line_nums.append([(str(line_num) + ' '), str(terminal)])
+            error_line_nums.append([(str(line_num)), str(terminal), 'Panic mode'])
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
             stack = stack[:-length_to_subtract]
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
@@ -190,7 +190,7 @@ def parsefile(filename):
         	print 'Error in line number: ', line_num
         	print 'Phrase level recovery initiated', M(state, terminal)
 
-        	error_line_nums.append([(str(line_num), str(terminal))])
+        	error_line_nums.append([str(line_num), str(terminal),'Phrase level'])
         	#print stack
         	#print input_array
         	#print index
@@ -224,16 +224,16 @@ def parsefile(filename):
     if len(error_line_nums) != 0:
         #print 'Error in following lines:', ''.join(s + " " for s in list(set(error_line_nums.split(' '))))
         print'\n\nREPORT:(panic mode recovery was initiated at these tokens)'
-        print '-------------------------------------------------'
-        print '|', '   Line no.\t', '|', 'Message:\t\t\t|'
-        print '-------------------------------------------------'
+        print '-------------------------------------------------------------------------'
+        print '|', '   Line no.\t', '|', 'Message:\t\t\t| Mode of recovery\t|'
+        print '-------------------------------------------------------------------------'
 
         for error in list(set(tuple(error_pair) for error_pair in error_line_nums)):#list(set(error_line_nums)):
             if len(str(error[1])) >= 3:
-                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t|'
+                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t|', str(error[2]), '\t\t|'
             else:
-                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t\t|'
-        print '-------------------------------------------------'
+                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t\t|', str(error[2]), '\t\t|'
+        print '-------------------------------------------------------------------------'
         return 'panic'
 
     else:
@@ -244,8 +244,9 @@ def parsefile(filename):
 if __name__ == "__main__":
     print ''
     status = parsefile(lex_outputfile)  
-
-    print 'SSCD Lab examination, R.V.C.E\n'+'\n----------------------------\nFinal parsing status: '+ status.upper()
+    print 'SSCD Lab examination, R.V.C.E\n'+'\nDeveloper info:'
+    print '----------------------------\nFinal parsing status: '+ status.upper()
+    
     if successful and status=='panic':
         print 'Message: Accepted the input after recovery'
     elif successful:
