@@ -155,6 +155,7 @@ def parsefile(filename):
         input_string = f.read()
 
     line_num = 0
+    step_num = 0
     input_array = (input_string + '$').split(' ')
     state = '0'
     index = 1
@@ -169,16 +170,18 @@ def parsefile(filename):
         state = stack.split(' ')[len(stack.split(' ')) - 1]
         terminal = input_array[index]
 
-        print '\n\n====Log===='
+        print '\n\n=======Log======='
+        print 'Step: ', step_num + 1
         print 'Current line number:', line_num + 1
         print 'stack: ', stack
         print 'current input symbol: ', terminal
+        step_num += 1
 
         if M(state, terminal) == '':
             print 'Error in line number: ', line_num
             print 'Panic mode recovery initiated'
             print 'Debug info: ..[terminal-> \"', terminal, '\"]..[state ->', state, ']'
-            error_line_nums.append([(str(line_num)), str(terminal), 'Panic mode'])
+            error_line_nums.append([(str(line_num)), str(terminal), 'Panic mode        @'+str(step_num)])
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
             stack = stack[:-length_to_subtract]
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
@@ -197,7 +200,7 @@ def parsefile(filename):
             #print index
             stack, input_array, index, err_token = get_eval(M(state, terminal))(stack, input_array, index)
             #terminal = input_array[index]
-            error_line_nums.append([str(line_num), str(err_token),'Phrase level'])
+            error_line_nums.append([str(line_num), str(err_token),'Phrase level      @'+str(step_num)])
             #print stack
             #print input_array
             #print index
@@ -227,16 +230,16 @@ def parsefile(filename):
     if len(error_line_nums) != 0:
         #print 'Error in following lines:', ''.join(s + " " for s in list(set(error_line_nums.split(' '))))
         print'\n\nREPORT:(Error recovery was initiated at these tokens)'
-        print '-------------------------------------------------------------------------'
-        print '|', '   Line no.\t', '|', 'Message:\t\t\t| Mode of recovery\t|'
-        print '-------------------------------------------------------------------------'
+        print '---------------------------------------------------------------------------------'
+        print '|', '   Line no.\t', '|', 'Message:\t\t\t| Mode of recovery (@step-no)\t|'
+        print '---------------------------------------------------------------------------------'
 
         for error in list(set(tuple(error_pair) for error_pair in error_line_nums)):#list(set(error_line_nums)):
             if len(str(error[1])) >= 3:
-                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t|', str(error[2]), '\t\t|'
+                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t|', str(error[2]), '\t|'
             else:
-                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t\t|', str(error[2]), '\t\t|'
-        print '-------------------------------------------------------------------------'
+                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t\t|', str(error[2]), '\t|'
+        print '---------------------------------------------------------------------------------'
         return 'panic'
 
     else:
