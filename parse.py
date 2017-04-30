@@ -3,6 +3,7 @@ import time
 
 parsetable = 'SSCD Parse table.csv'
 lex_outputfile = 'output.txt'
+successful = False
 
 __author__ = 'Ambareesh Revanur'
 
@@ -95,7 +96,7 @@ def get_eval(estr):
 
 def shift(stack, state, terminal):
     stack += ' ' + terminal + ' ' + M(state, terminal)[1:]  # push
-    print 'state', state, 'terminal', terminal, 'action', M(state, terminal)
+    print 'SHIFT: From state', state, 'on terminal', terminal, 'with action', M(state, terminal)
     return stack
 
 
@@ -136,7 +137,7 @@ def reduce(stack, state, terminal):
 
     # goto
 
-    print 'state', state, 'terminal', terminal, 'goto', M(state, terminal), 'reduce', ''.join(reduce_string[1]), 'reduction production number ', M(state, terminal)
+    print 'REDUCE: on state', state, 'and terminal', terminal, 'goto', M(state, terminal), 'reduce', ''.join(reduce_string[1]), '\nReduction production number:', M(state, terminal)
     stack += ' ' + reduce_string[0][0]
     stack += ' ' + M(state, reduce_string[0][0])
     return stack
@@ -144,6 +145,7 @@ def reduce(stack, state, terminal):
 
 
 def parsefile(filename):
+    global successful
     stack = '$ 0'
     error_line_nums = []
     input_string = ''
@@ -202,6 +204,7 @@ def parsefile(filename):
 
         elif M(state, terminal)[0] == 'a':
             print 'Successfully parsed. C++ program is according to syntax.'
+            successful = True
             if len(error_line_nums)!=0:
                 break
             else:
@@ -240,5 +243,16 @@ def parsefile(filename):
 
 if __name__ == "__main__":
     print ''
-    print 'SSCD Lab examination, R.V.C.E\n'+'\n----------------------------\nFinal parsing status: '+ parsefile(lex_outputfile)
+    status = parsefile(lex_outputfile)  
+
+    print 'SSCD Lab examination, R.V.C.E\n'+'\n----------------------------\nFinal parsing status: '+ status
+    if successful and status=='panic':
+        print 'Message: Accepted the input after recovery'
+    elif successful:
+        print 'Message: Accepted the input'
+    elif not successful and status=='panic':
+        print 'Message: Not Accepted after recovery'
+    else:
+        print 'Message: Resolve the errors and run the program'
+
     print '----------------------------\n'

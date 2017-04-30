@@ -11,8 +11,8 @@ class A
 	{
 		int a, b, c;
 		return 1;
-	}}
-};
+	}
+}};
 
 int fun()
 {
@@ -26,10 +26,10 @@ int main()
 int x;
 A obj1;
 C obj2;
-cin>>a;cin
+cin>>a;
 cout<<"HIH";
-if
-for(i=j;i<4;i=i+1)
+
+if for(i=j;i<4;i=i+1)
 {
 	cout<<"HI";;
 }
