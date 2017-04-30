@@ -223,9 +223,9 @@ def parsefile(filename):
 
     if len(error_line_nums) != 0:
         #print 'Error in following lines:', ''.join(s + " " for s in list(set(error_line_nums.split(' '))))
-        print'\n\nPanic mode recovery was performed\nREPORT:'
+        print'\n\nREPORT:(panic mode recovery was initiated at these tokens)'
         print '-------------------------------------------------'
-        print '|', '   Line no.\t', '|', 'Message: \t\t\t|'
+        print '|', '   Line no.\t', '|', 'Message:\t\t\t|'
         print '-------------------------------------------------'
 
         for error in list(set(tuple(error_pair) for error_pair in error_line_nums)):#list(set(error_line_nums)):
@@ -245,7 +245,7 @@ if __name__ == "__main__":
     print ''
     status = parsefile(lex_outputfile)  
 
-    print 'SSCD Lab examination, R.V.C.E\n'+'\n----------------------------\nFinal parsing status: '+ status
+    print 'SSCD Lab examination, R.V.C.E\n'+'\n----------------------------\nFinal parsing status: '+ status.upper()
     if successful and status=='panic':
         print 'Message: Accepted the input after recovery'
     elif successful:
