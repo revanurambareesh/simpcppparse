@@ -1,4 +1,4 @@
-from pl_recovery import e1
+from pl_recovery import pl_error_routine
 import time
 
 parsetable = 'SSCD Parse table.csv'
@@ -89,8 +89,10 @@ def get_reduce(number):
 
 
 def get_eval(estr):
-	if estr == 'e1':
-		return e1.e1
+    if estr == 'e1':
+        return pl_error_routine.e1
+    if estr == 'e2':
+        return pl_error_routine.e2
 
 
 
@@ -187,20 +189,21 @@ def parsefile(filename):
             #return 'not accepted'
 
         elif M(state, terminal)[0] == 'e':
-        	print 'Error in line number: ', line_num
-        	print 'Phrase level recovery initiated', M(state, terminal)
+            print 'Error in line number: ', line_num
+            print 'Phrase level recovery initiated', M(state, terminal)
 
-        	error_line_nums.append([str(line_num), str(terminal),'Phrase level'])
-        	#print stack
-        	#print input_array
-        	#print index
-        	stack, input_array, index = get_eval(M(state, terminal))(stack, input_array, index)
-        	#print stack
-        	#print input_array
-        	#print index
-        	#time.sleep(3)
-        	continue
-        	pass
+            #print stack
+            #print input_array
+            #print index
+            stack, input_array, index, err_token = get_eval(M(state, terminal))(stack, input_array, index)
+            #terminal = input_array[index]
+            error_line_nums.append([str(line_num), str(err_token),'Phrase level'])
+            #print stack
+            #print input_array
+            #print index
+            #time.sleep(3)
+            continue
+            pass
 
         elif M(state, terminal)[0] == 'a':
             print 'Successfully parsed. C++ program is according to syntax.'
@@ -245,7 +248,7 @@ if __name__ == "__main__":
     print ''
     status = parsefile(lex_outputfile)  
     print 'SSCD Lab examination, R.V.C.E\n'+'\nDeveloper info:'
-    print '----------------------------\n'#Final parsing status: '+ status.upper()
+    print '--------------------------------------------'#Final parsing status: '+ status.upper()
     
     if successful and status=='panic':
         print 'Message: Accepted the input after recovery'
@@ -256,4 +259,4 @@ if __name__ == "__main__":
     else:
         print 'Message: Resolve the errors and run the program, Please resolve the shown errors'
 
-    print '----------------------------\n'
+    print '--------------------------------------------\n'

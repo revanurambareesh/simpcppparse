@@ -27,7 +27,7 @@ int x;
 A obj1;
 C obj2;
 cin>>a;
-cout<<"HIH";
+cout<<<<<"HIH";
 
 for(i=j;i<4;i=i+1)
 {
