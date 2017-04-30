@@ -76,10 +76,9 @@ uop "++"|"--"
 "else" {fprintf(outfile, "%s", "el ");}
 (" ")+|[\t]+ ;
 [";"] fprintf(outfile, "%s", "; ");
-[\n] {linenum++;fprintf(outfile, "%d ", linenum);}
+"\n" {linenum++;fprintf(outfile, "%d ", linenum);}
 {validmem} {printf("\n%s\n", yytext);verifyID(yytext);}
 {num} {printf("\n%s\n", yytext);verifyID(yytext);}
-{validvar} {verifyID(yytext);}
 . {printf("\nfailed: %s\n", yytext);}
 %%
 

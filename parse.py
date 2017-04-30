@@ -145,7 +145,7 @@ def reduce(stack, state, terminal):
 
 def parsefile(filename):
     stack = '$ 0'
-    error_line_nums = ''
+    error_line_nums = []
     input_string = ''
     with open(filename, 'r') as f:
         input_string = f.read()
@@ -165,8 +165,8 @@ def parsefile(filename):
         state = stack.split(' ')[len(stack.split(' ')) - 1]
         terminal = input_array[index]
 
-        print '====Log===='
-        print 'Line number:', line_num
+        print '\n\n====Log===='
+        print 'Current line number:', line_num + 1
         print 'stack: ', stack
         print 'current input symbol: ', terminal
 
@@ -174,7 +174,7 @@ def parsefile(filename):
             print 'Error in line number: ', line_num
             print 'Panic mode recovery initiated'
             print 'Debug info: ..[terminal-> \"', terminal, '\"]..[state ->', state, ']'
-            error_line_nums += (str(line_num) + ' ')
+            error_line_nums.append([(str(line_num) + ' '), str(terminal)])
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
             stack = stack[:-length_to_subtract]
             length_to_subtract = len(stack.split(' ')[len(stack.split(' ')) - 1]) + 1
@@ -188,7 +188,7 @@ def parsefile(filename):
         	print 'Error in line number: ', line_num
         	print 'Phrase level recovery initiated', M(state, terminal)
 
-        	error_line_nums += (str(line_num) + ' ')
+        	error_line_nums.append([(str(line_num), str(terminal))])
         	#print stack
         	#print input_array
         	#print index
@@ -202,7 +202,7 @@ def parsefile(filename):
 
         elif M(state, terminal)[0] == 'a':
             print 'Successfully parsed. C++ program is according to syntax.'
-            if error_line_nums!='':
+            if len(error_line_nums)!=0:
                 break
             else:
             	return 'accept'
@@ -218,8 +218,19 @@ def parsefile(filename):
                 print 'reduce failed'
                 return '-1'
 
-    if error_line_nums != '':
-        print 'Error in following lines:', ''.join(s + " " for s in list(set(error_line_nums.split(' '))))
+    if len(error_line_nums) != 0:
+        #print 'Error in following lines:', ''.join(s + " " for s in list(set(error_line_nums.split(' '))))
+        print'\n\nPanic mode recovery was performed\nREPORT:'
+        print '-------------------------------------------------'
+        print '|', '   Line no.\t', '|', 'Message: \t\t\t|'
+        print '-------------------------------------------------'
+
+        for error in list(set(tuple(error_pair) for error_pair in error_line_nums)):#list(set(error_line_nums)):
+            if len(str(error[1])) >= 3:
+                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t|'
+            else:
+                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t\t|'
+        print '-------------------------------------------------'
         return 'panic'
 
     else:
@@ -228,4 +239,6 @@ def parsefile(filename):
 
 
 if __name__ == "__main__":
-    print 'Parsing status: '+ parsefile(lex_outputfile)
+    print ''
+    print 'SSCD Lab examination, R.V.C.E\n'+'\n----------------------------\nFinal parsing status: '+ parsefile(lex_outputfile)
+    print '----------------------------\n'
