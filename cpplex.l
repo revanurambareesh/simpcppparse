@@ -54,7 +54,8 @@ op "+"|"-"|"*"|"/"|"=="|"="|"!="|">"|">="|"<"|"<="|"+="|"-="|"*="|"/="
 uop "++"|"--"
 
 %%
-[/][/][^\n]*[\n] {printf("Comment found:%s\n", yytext);}
+"\n" {linenum++;fprintf(outfile, "%d ", linenum);}
+[/][/][^("\n")]*[\n] {printf("Comment found:%s\n", yytext);linenum++;}
 "/*"[^("*/")]*"*/" {printf("Comment found\n");}
 "\"".*"\"" {printf("literal found");fprintf(outfile, "%s", "id ");}
 "#include"((" ")?)("<".*">")|("\"".*"\"") {printf("Found #include\n");fprintf(outfile, "%s", "i ");}
@@ -76,7 +77,6 @@ uop "++"|"--"
 "else" {fprintf(outfile, "%s", "el ");}
 (" ")+|[\t]+ ;
 [";"] fprintf(outfile, "%s", "; ");
-"\n" {linenum++;fprintf(outfile, "%d ", linenum);}
 {validmem} {printf("\n%s\n", yytext);verifyID(yytext);}
 {num} {printf("\n%s\n", yytext);verifyID(yytext);}
 . {printf("\nfailed: %s\n", yytext);}

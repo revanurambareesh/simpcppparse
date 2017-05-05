@@ -154,7 +154,7 @@ def parsefile(filename):
     with open(filename, 'r') as f:
         input_string = f.read()
 
-    line_num = 0
+    line_num = 1
     step_num = 0
     input_array = (input_string + '$').split(' ')
     state = '0'
@@ -172,7 +172,7 @@ def parsefile(filename):
 
         print '\n\n=======Log======='
         print 'Step: ', step_num + 1
-        print 'Current line number:', line_num + 1
+        print 'Current line number:', line_num
         print 'stack: ', stack
         print 'current input symbol: ', terminal
         step_num += 1
@@ -236,9 +236,9 @@ def parsefile(filename):
 
         for error in list(set(tuple(error_pair) for error_pair in error_line_nums)):#list(set(error_line_nums)):
             if len(str(error[1])) >= 3:
-                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t|', str(error[2]), '\t|'
+                print '|\t', str(int(error[0])), '\t| Unexpected token:', str(error[1]), '\t|', str(error[2]), '\t|'
             else:
-                print '|\t', str(int(error[0])+1), '\t| Unexpected token:', str(error[1]), '\t\t|', str(error[2]), '\t|'
+                print '|\t', str(int(error[0])), '\t| Unexpected token:', str(error[1]), '\t\t|', str(error[2]), '\t|'
         print '---------------------------------------------------------------------------------'
         return 'panic'
 
@@ -249,7 +249,8 @@ def parsefile(filename):
 
 if __name__ == "__main__":
     print ''
-    status = parsefile(lex_outputfile)  
+    print 'RUNNING SIMPLE C++ PARSER\n'
+    status = parsefile(lex_outputfile) 
     print 'SSCD Lab examination, R.V.C.E\n'+'\nDeveloper info:'
     print '--------------------------------------------'#Final parsing status: '+ status.upper()
     
